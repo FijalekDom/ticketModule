@@ -2,6 +2,7 @@
 
 namespace App\UI\Http\Controller;
 
+use App\Application\Command\SendTickedAddedEmail;
 use App\Application\Exception\InvalidEmailException;
 use App\Application\Service\FileUploader;
 use App\Domain\Constant\TicketSubject;
@@ -10,6 +11,7 @@ use App\Infrastructure\Repository\DoctrineTicketRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/client')]
@@ -26,8 +28,11 @@ class ClientController extends AbstractController
     }
 
     #[Route('/add-ticket', name: 'add_ticket', methods: ['POST'])]
-    public function add(Request $request, FileUploader $fileUploader, DoctrineTicketRepository $doctrineTicketRepository): Response
-    {
+    public function add(Request $request,
+                        FileUploader $fileUploader,
+                        DoctrineTicketRepository $doctrineTicketRepository,
+                        MessageBusInterface $messageBus
+    ): Response {
         try {
             $subject = $request->get('subject');
             $email = $request->get('email');
@@ -40,6 +45,8 @@ class ClientController extends AbstractController
             if($file) {
                 $fileUploader->upload($file, $id);
             }
+
+            $messageBus->dispatch(new SendTickedAddedEmail($ticket));
 
             return $this->render('client/success.html.twig');
         } catch (InvalidEmailException $e) {
