@@ -18,7 +18,6 @@ class AdminController extends AbstractController
     public function list(GetTicketsQuery $getTicketsQuery): Response
     {
         $tickets = $getTicketsQuery->getResult();
-        //$path = $this->getParameter('%env(TICKET_ATTACHMENT_PATH)%');
 
         return $this->render('admin/list.html.twig', [
                 'tickets' => $tickets
