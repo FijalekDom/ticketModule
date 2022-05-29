@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <style>
+        table, th, td {
+            border:1px solid black;
+            padding: 5px;
+        }
+    </style>
+
+    <a href="{{ path('logout') }}">Wyloguj</a>
+
+    <h1>Lista zgłoszeń</h1>
+
+    <table>
+        <thead>
+            <th>Temat</th>
+            <th>Email</th>
+            <th>Wiadomość</th>
+            <th>Załącznik</th>
+        </thead>
+        <tbody>
+            {% for ticket in tickets %}
+                <tr>
+                    <td>{{ ticket.subject }}</td>
+                    <td>{{ ticket.email }}</td>
+                    <td>{{ ticket.message }}</td>
+                    <td><a href="/uploads/attachments/{{ ticket.id }}.{{ ticket.attachment_name | split('.') | last }}"
+                           download="{{ ticket.attachment_name }}">
+                            {{ ticket.attachment_name }}</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -1,0 +1,7 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <a href="{{ path('logout') }}">Wyloguj</a>
+    <h1>Zgłoszenie zostało dodane</h1>
+    <a href="{{ path('client_form') }}">Dodaj kolejne zgłoszenie</a>
+{% endblock %}

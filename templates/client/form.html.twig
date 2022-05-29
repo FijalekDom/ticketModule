@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <a href="{{ path('logout') }}">logout</a>
+    <h1>Dodaj zgłoszenie</h1>
+    <form action="{{ path('add_ticket') }}" method="post" enctype="multipart/form-data">
+        <select name="subject" required>
+            <option value="">Wybierz temat</option>
+            {% for key, subject in subjects %}
+                <option value="{{ key }}">{{ subject }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <input type="email" placeholder="Adres e-mail" id="email" name="email" required />
+        <br>
+        <textarea placeholder="Wpisz tutaj treść wiadomości" id="message" name="message" required></textarea>
+        <br>
+        <label>Dodaj załącznik</label>
+        <input type="file" id="attachment" name="attachment"/>
+        <br>
+        <button type="submit">Wyślij</button>
+    </form>
+{% endblock %}
